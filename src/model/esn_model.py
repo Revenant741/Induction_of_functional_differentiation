@@ -4,6 +4,7 @@ import math
 import numpy as np
 import random
 
+#普通の拘束条件付きESN
 class Normal_Binde_ESN_Model(nn.Module):
   def __init__(self,args):
     super().__init__()
@@ -67,6 +68,7 @@ class Normal_Binde_Reservior(nn.Module):
     bound = 1 / math.sqrt(fan_in)
     nn.init.uniform_(bias, -bound, bound)
 
+#内部状態を観測出来るようにした拘束条件付きESN
 class Binde_ESN_Execution_Model(nn.Module):
   def __init__(self,args):
     super().__init__()

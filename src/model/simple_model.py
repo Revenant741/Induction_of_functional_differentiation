@@ -39,3 +39,5 @@ class RNN_Model(nn.Module):
   def initHidden(self):
     self.hx = torch.zeros(self.batch_size, self.size_middle).cuda()
 
+
+
