@@ -139,6 +139,7 @@ def nomal_eva(sp_var,tp_var):
   eva = sp_var+tp_var
   return eva
 
+#分散の評価関数
 def best_eva(sp_var,tp_var):
   raito = sp_var-tp_var
   eva = sp_var+tp_var-raito

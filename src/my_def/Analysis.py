@@ -110,6 +110,14 @@ class Analysis:
       writer = csv.writer(f)
       for y_2 in h_out_y:
           writer.writerow([y_2])
+      
+  def save_to_var(self,var):
+    name = self.name
+    point = 'src/data/'
+    with open(f''+point+name+'_var.csv', 'w') as f:
+        writer = csv.writer(f)
+        for var1 in var:
+            writer.writerow([var1])
 
   def mutual_plot(self,in_x,in_y,out_x,out_y):
     name = self.name

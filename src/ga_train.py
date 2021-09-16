@@ -31,7 +31,7 @@ def add_arguments(parser):
   parser.add_argument('--generation', type=int, default=100, help='generation')
   parser.add_argument('--gene_length', default=16, help='pop_model_number')
   #test時
-  #src/ga_train.py --optimizer Adam --pop 10 --survivor 4 --name 'ga_test'
+  #python3 src/ga_train.py --optimizer Adam --pop 10 --survivor 4 --name 'ga_test'
   #実行
   #python3 src/ga_train.py  --epoch 20 --device 'cuda:0' --name 'ga_hf_20_1'
   #python3 src/ga_train.py  --epoch 20 --device 'cuda:0' --name 'ga_hf_20_2'
@@ -63,20 +63,34 @@ def make_one_gene(args, g, binde, ind_learn, optimizer, inputdata_test, ind):
     learn_finish_time = time.time() -learn_start
     print ("-----学習時間:{:.1f}".format(learn_finish_time) + "[sec]-----")
     h_in_x, h_in_y, h_out_x, h_out_y = individual.mutual_info(model,binde[:16,:16],binde[:16,16:32],binde[16:32,:16],binde[16:32,16:32])
+    #総合的な精度と誤差を算出
     acc = (sp_accuracys[-1] + tp_accuracys[-1])/2
     loss = (sp_loss_list[-1] + tp_loss_list[-1])/2
+    #個体毎に分散を算出
+    sp_var =  (np.var(h_in_x)+np.var(h_out_x))
+    tp_var =  (np.var(h_in_y)+np.var(h_out_y))
+    eva= best_eva(sp_var,tp_var)
     binde = binde.to('cpu').detach().numpy().copy()
-    ind.append((acc,loss,binde,sp_accuracys[-1],tp_accuracys[-1],sp_loss_list[-1],tp_loss_list[-1],model,h_in_x, h_in_y, h_out_x, h_out_y))
+    ind.append((acc,loss,eva,binde,sp_accuracys[-1],tp_accuracys[-1],sp_loss_list[-1],tp_loss_list[-1],model,h_in_x, h_in_y, h_out_x, h_out_y))
     del individual
   #時間計測
   ga_finish_time = time.time()-ga_start_time
   print ("-----世代学習の経過時間:{:.1f}".format(ga_finish_time) + "[sec]-----")
   return ind
 
+#分散の評価関数
+def best_eva(sp_var,tp_var):
+  raito = abs(sp_var-tp_var)
+  eva = sp_var+tp_var-raito
+  return eva
+
 #選択，生き残る個体を決める関数
 def evalution(ind):
   #0で精度、1で誤差，Falseで小さい順，Trueで大きい順
-  ind = sorted(ind, key=lambda x:x[1], reverse=False)
+  #誤差
+  #ind = sorted(ind, key=lambda x:x[1], reverse=False)
+  #機能分化
+  ind = sorted(ind, key=lambda x:x[2], reverse=True)
   return ind
 
 #二点交叉
@@ -106,8 +120,8 @@ def for_save(args,SAVE,g,survival ,binde):
   print('========')
   print('=評価=')
   rank = 0
-  SP_A ,TP_A ,SP_L ,TP_L ,X_IN ,Y_IN ,X_OUT, Y_OUT, Models, G, W = SAVE
-  for acc,loss,binde1,sp_accuracy,tp_accuracy,sp_loss,tp_loss,models,h_in_x, h_in_y, h_out_x, h_out_y in survival:
+  SP_A ,TP_A ,SP_L ,TP_L ,VAR,X_IN ,Y_IN ,X_OUT, Y_OUT, Models, G, W = SAVE
+  for acc,loss,var,binde1,sp_accuracy,tp_accuracy,sp_loss,tp_loss,models,h_in_x, h_in_y, h_out_x, h_out_y in survival:
     #精度の可視化
     rank += 1
     print(f'-----第{rank}位--精度={acc*100:.1f}%-----')
@@ -118,6 +132,7 @@ def for_save(args,SAVE,g,survival ,binde):
     TP_A.append(tp_accuracy)
     SP_L.append(sp_loss)
     TP_L.append(tp_loss)
+    VAR.append(var)
     Models.append(models)
     X_IN.append(h_in_x)
     Y_IN.append(h_in_y)
@@ -130,16 +145,24 @@ def for_save(args,SAVE,g,survival ,binde):
   analysis.ga_save_to_data(Models,SP_A,TP_A,SP_L,TP_L,G,W)
   #1世代の相互情報量の記録
   analysis.save_to_mutual(X_IN, Y_IN, X_OUT, Y_OUT)
+  #分散の保存
+  analysis.save_to_var(VAR)
+  #次の世代に持ち越し
+  SAVE =SP_A ,TP_A ,SP_L ,TP_L ,VAR,X_IN ,Y_IN ,X_OUT, Y_OUT, Models, G, W
   return SAVE, binde
 
 def ga_train(args,ind_learn,optimizer,inputdata):
+  #時間計測
   total_time = time.time()
-  SP_A ,TP_A ,SP_L ,TP_L ,X_IN ,Y_IN ,X_OUT, Y_OUT, Models, G, W = [],[],[],[],[],[],[],[],[],[],[]
-  SAVE =SP_A ,TP_A ,SP_L ,TP_L ,X_IN ,Y_IN ,X_OUT, Y_OUT, Models, G, W
+  #保存用の変数用意
+  SP_A ,TP_A ,SP_L ,TP_L ,VAR,X_IN ,Y_IN ,X_OUT, Y_OUT, Models, G, W = [],[],[],[],[],[],[],[],[],[],[],[]
+  SAVE =SP_A ,TP_A ,SP_L ,TP_L ,VAR,X_IN ,Y_IN ,X_OUT, Y_OUT, Models, G, W
   ind = []
   binde = []
+  #学習データ
   inputdata_test = inputdata
   first_pop = args.pop
+  #遺伝的アルゴリズムの開始
   for g in range(args.generation):
     #世代の作成
     print(f'\n世代{g+1}')
@@ -151,7 +174,7 @@ def ga_train(args,ind_learn,optimizer,inputdata):
     #選択,indの初期化
     survival = ind[0:args.survivor]
     ind = survival
-    #記録用の処理
+    #記録用の処理，優秀な構造の受け渡し
     SAVE, binde = for_save(args,SAVE,g,survival,binde)
     #交配
     #次世代の生成，生成個体の数は初代と同じ数
@@ -188,8 +211,7 @@ if __name__ == '__main__':
     ind_learn = train.Adam_train
     optimizer = torch.optim.Adam
     
-  
-  #生き残る個体数
+  #重みと構造の探索関数
   ga_train(args,ind_learn,optimizer,inputdata)
 
   #test
