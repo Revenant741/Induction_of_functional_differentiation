@@ -33,25 +33,24 @@ def add_arguments(parser):
   #test時
   #python3 src/ga_train.py --optimizer Adam --pop 10 --survivor 4 --name 'ga_test'
   #実行
-  #python3 src/ga_train.py  --epoch 20 --device 'cuda:0' --name 'ga_hf_20_1'
-  #python3 src/ga_train.py  --epoch 20 --device 'cuda:0' --name 'ga_hf_20_2'
-  #python3 src/ga_train.py  --epoch 20 --pop 20 ----survivor 10 --device 'cuda:1' --name 'ga_hf_pop_20'
-  #python3 src/ga_train.py  --epoch 20 --pop 30 --survivor 15 --device 'cuda:1' --name 'ga_hf_pop_30'
+  #python3 src/ga_train.py  --epoch 20 --device 'cuda:0' --name 'func_diff_e20_p20_l10'
 
 
 #世代における個体の評価
-def make_one_gene(args, g, binde, ind_learn, optimizer, inputdata_test, ind):
-  bindes = binde
+def make_one_gene(args, g, bindes, ind_learn, optimizer, inputdata_test, ind):
   #世代の作成
   print('========')
   print(f'=学習=')
   ga_start_time = time.time()
+  #生成した接続構造分学習
   for i in range(args.pop):
     acc = 0
     loss = 0
     if g == 0:
+      #第一世代では接続構造を生成
       binde = torch.randint(0, 2, (args.gene_length*2, args.gene_length*2)).to(args.device) 
     else:
+      #新しい接続構造のみ学習
       binde = torch.from_numpy(bindes[i]).clone().to(args.device) 
     #モデルの実行，重み,誤差，精度を返して来る．
     print(f'--個体{i+1}--')
@@ -115,11 +114,27 @@ def mutate(parent,gene_length):
       child[r1][r2] = 0
   return child
 
+#交配関数
+def crossbreed(args,binde,first_pop):
+  #次世代の生成，生成個体の数は初代と同じ数
+  while len(binde) < first_pop:
+    m1 = random.randint(0,len(binde)-1)#親となる個体の決定
+    m2 = random.randint(0,len(binde)-1)#親となる個体の決定
+    child = tow_point_crossover(binde[m1],binde[m2],args.gene_length)#交叉処理
+    #突然変異
+    if random.random() < args.mutate_rate:
+      m = random.randint(0,len(binde)-1)#突然変異する個体を選択
+      child = mutate(binde[m],args.gene_length)
+    binde.append(child)
+  return binde
+
 #保存用の処理
 def for_save(args,SAVE,g,survival ,binde):
   print('========')
   print('=評価=')
   rank = 0
+  #初期化(前世代の接続を不正に残さない為)
+  binde = []
   SP_A ,TP_A ,SP_L ,TP_L ,VAR,X_IN ,Y_IN ,X_OUT, Y_OUT, Models, G, W = SAVE
   for acc,loss,var,binde1,sp_accuracy,tp_accuracy,sp_loss,tp_loss,models,h_in_x, h_in_y, h_out_x, h_out_y in survival:
     #精度の可視化
@@ -166,28 +181,19 @@ def ga_train(args,ind_learn,optimizer,inputdata):
   for g in range(args.generation):
     #世代の作成
     print(f'\n世代{g+1}')
+    #個体生成，学習，評価値を保存
     ind = make_one_gene(args, g, binde, ind_learn, optimizer, inputdata_test, ind)
-    #初期化(前世代の接続を不正に残さない為)
-    binde = []
-    #エリートを選択
+    #評価値順にソート
     ind = evalution(ind)
-    #選択,indの初期化
+    #優秀構造のみ残す
     survival = ind[0:args.survivor]
+    #次世代の優秀個体として評価値を持ち越し
     ind = survival
-    #記録用の処理，優秀な構造の受け渡し
+    #優秀な構造のみ保持，保存
     SAVE, binde = for_save(args,SAVE,g,survival,binde)
-    #交配
-    #次世代の生成，生成個体の数は初代と同じ数
-    while len(binde) < first_pop:
-      m1 = random.randint(0,len(binde)-1)#親となる個体の決定
-      m2 = random.randint(0,len(binde)-1)#親となる個体の決定
-      child = tow_point_crossover(binde[m1],binde[m2],args.gene_length)#交叉処理
-      #突然変異
-      if random.random() < args.mutate_rate:
-        m = random.randint(0,len(binde)-1)#突然変異する個体を選択
-        child = mutate(binde[m],args.gene_length)
-      binde.append(child)
     #次世代の設定
+    #交配,新しい構造を生成
+    binde = crossbreed(args,binde,first_pop)
     #学習する個体は新しく生成された個体のみ
     args.pop = first_pop-args.survivor
     #新しく評価が必要なもののみ追加
