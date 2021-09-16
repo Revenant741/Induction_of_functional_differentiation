@@ -138,8 +138,11 @@ if __name__ == '__main__':
     else:
       n += 20
     print('generation'+str(j+1))
+    #全ての個体の相互情報量の算出
     in_x,in_y,out_x,out_y = gene_all_pop_plot(args,pop,n)
+    #世代で最も精度の高い個体の相互情報量の算出
     #in_x,in_y,out_x,out_y = gene_best_pop_plot(args,pop,n)
+    #相互情報量の描画
     plot_mutial_data(args,j,in_x,in_y,out_x,out_y)
 
 

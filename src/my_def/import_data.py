@@ -49,8 +49,8 @@ def import_data(args,read_name,binde_path,model_path):
       for row in csv.reader(f):
           tp_loss.append(float(row[0]))
   for g in range(args.start_gene):
-    for i in range(args.pop):
-      gene.append(i)
+    for i in range(args.survivor):
+      gene.append(g)
   return sp_accuracy, tp_accuracy, sp_loss, tp_loss, model, gene, binde
 
 def import_mutial_info(read_name):

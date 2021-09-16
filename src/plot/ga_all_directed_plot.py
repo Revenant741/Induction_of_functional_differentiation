@@ -142,10 +142,11 @@ if __name__ == '__main__':
     model=models[model_num]
     #拘束条件がまともなら↓2行を逆に
     #binde1,binde2,binde3,binde4 = dp.binde_division(binde)
+    binde1, binde2, binde3, binde4 = No_binde()
     optimizer = torch.optim.Adam
     inputdata_test = inputdata.make_test(args)
     #相互情報量の分析
     training= train.Adam_train(args,model,optimizer,inputdata_test)
-    binde1, binde2, binde3, binde4 = No_binde()
-    h_in_x, h_in_y, h_out_x, h_out_y = training.mutual_info(model,binde1,binde2,binde3,binde4)      
+    h_in_x, h_in_y, h_out_x, h_out_y = training.mutual_info(model,binde1,binde2,binde3,binde4)   
+    #ニューロンと重みの接続状態の描画
     direct_plot(args,model,binde1,binde2,binde3,binde4,h_in_x,h_in_y,h_out_x,h_out_y,i)

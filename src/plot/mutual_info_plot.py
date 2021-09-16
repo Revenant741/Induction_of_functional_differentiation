@@ -41,14 +41,9 @@ def import_data_and_clean():
   out_y = []
   #ga_mode= False
   ga_mode= True
-  #read_name='hf_ga5_epoch200_bestmodel'
+  
   read_name = 'ga_hf_5_Normal'
   write_name = 'ga_hf_5_ana'
-  #write_name= 'mutial_plot_ga5_epoch200_bestmodel'
-  #read_name='test/ga_test'
-  #write_name= 'ga_mutial_info'
-  #read_name='test/ga_test'
-  #write_name= 'ga_mutial_info'
   generation = 10
   survivor = 20 #生き残る個体
   with open('src/data/'+read_name+'_h_in_x.csv') as f:
