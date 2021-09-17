@@ -7,8 +7,12 @@
 # 実行方法
   docker環境の作成
   `$python3 setup.py`
-  docker環境へのマウント
-  `$docker start -i my-esn`
+  docker環境の確認
+  `$docker ps -a`
+  docker環境のスタート
+  `$docker start [コンテナID]`
+  docker環境に入る
+  `$docker attach [コンテナID]`
   
   一次収束法(Adam)での実行
   `$python3 src/train.py`
@@ -45,7 +49,7 @@
 
   * plot 分析と描画の為の関数
 
-    * acc_plot 遺伝的アルゴリズムの世代毎の精度の描画
+    * ga_acc_loss_plot 遺伝的アルゴリズムの世代毎の精度の描画
 
     * atracter アトラクタの描画
 
@@ -87,6 +91,7 @@
 # トムルファイルを用いたdocker環境の構築
 
   base_image = "pytorch/pytorch:1.8.0-cuda11.1-cudnn8-devel"
+
   image = "hessian_free_leaky_esn:1.0"
 
   で最新のプログラムが動きます

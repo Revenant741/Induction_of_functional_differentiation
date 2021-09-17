@@ -18,6 +18,7 @@ class Use_Model:
     binde4 = torch.randint(0, 2, (size_middle, size_middle)).to(self.device)  
     return model, binde1, binde2, binde3, binde4
 
+  #一つの個体の情報をインポート
   def finded_one_binde(self):
     model = Model.esn_model.Binde_ESN_Execution_Model(self.args)
     with open(self.args.model_path, 'rb') as f:
@@ -32,6 +33,7 @@ class Use_Model:
     binde = binde.to(self.device)  
     return model,binde[:16,:16],binde[:16,16:32],binde[16:32,:16],binde[16:32,16:32]
 
+  #遺伝的アルゴリズムの結果の中から一つの個体の情報をインポート
   def finded_ga_binde(self):
     model = Model.esn_model.Binde_ESN_Execution_Model(self.args)
     with open(self.args.model_path, 'rb') as f:
@@ -47,3 +49,11 @@ class Use_Model:
     binde = torch.from_numpy(bindes).clone()
     binde = binde.to(self.device)  
     return model,binde[:16,:16],binde[:16,16:32],binde[16:32,:16],binde[16:32,16:32]
+
+  def RNN_binde(self,size_middle=16):
+    model = Model.simple_model.RNN_Execution_Model(self.args)
+    binde1 = torch.randint(1, 2, (size_middle, size_middle)).to(self.device)  
+    binde2 = torch.randint(1, 2, (size_middle, size_middle)).to(self.device)  
+    binde3 = torch.randint(1, 2, (size_middle, size_middle)).to(self.device)  
+    binde4 = torch.randint(1, 2, (size_middle, size_middle)).to(self.device)  
+    return model, binde1, binde2, binde3, binde4
