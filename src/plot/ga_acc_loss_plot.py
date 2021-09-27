@@ -3,8 +3,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 #python3 src/plot/ga_acc_loss_plot.py 
-read_name='ga_hf_loss_e20_p20_l10/ga_hf_pop_20'
-write_name = 'loss_eva'
+#read_name='ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20'
+read_name='ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20'
+#read_name='func_diff_e20_p20_l10'
+#write_name = 'func_diff_eva'
+write_name = 'loss_eva_g50'
 accuracy = []
 accuracy2 = []
 gene = []

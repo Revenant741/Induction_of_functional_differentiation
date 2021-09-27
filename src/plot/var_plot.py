@@ -28,8 +28,8 @@ def add_arguments(parser):
   #python3 src/plot/var_plot.py --write_name '20epoch/var_gene/var_change'
   #個体毎の分散の分析
   #python3 src/plot/var_plot.py --write_name '20epoch/var_pop/var_change'
-  #python3 src/plot/var_plot.py --write_name '20epoch/var_pop2/var_move_change'
-
+  #python3 src/plot/var_plot.py --write_name 'loss_eva_ga_var_change' --read_name ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20 --model_path ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20
+  #python3 src/plot/var_plot.py --write_name 'func_diff_eva_ga_var_change' --read_name func_diff_e20_p20_l10 --model_path func_diff_e20_p20_l10
 def No_binde(size_middle=16):
   binde1 = torch.randint(1, 2, (size_middle, size_middle)).to(args.device)  
   binde2 = torch.randint(1, 2, (size_middle, size_middle)).to(args.device)  
@@ -39,8 +39,10 @@ def No_binde(size_middle=16):
 
 def ga_gene_var(args,models,inputdata_test,optimizer):
   ga_all_var = []
-  pop = 20
+  pop = 10
   generation = int(len(models)/pop)
+  print(len(models))
+  print(generation)
   for i in range(generation):
     #世代毎の相互情報量の初期化
     in_x = []
@@ -50,7 +52,7 @@ def ga_gene_var(args,models,inputdata_test,optimizer):
     if i == 0:
       num = 0
     else:
-      num += 20 
+      num += pop
     for j in range(pop):
     #世代内の個体を一体づつ持ってくる
       model_num = num+j
@@ -65,7 +67,7 @@ def ga_gene_var(args,models,inputdata_test,optimizer):
       in_y.append(h_in_y)
       out_x.append(h_out_x)
       out_y.append(h_out_y)
-    print(len(in_x))
+    #print(len(in_x))
     #世代における分散の算出
     sp_var =  (np.var(in_x)+np.var(out_x))
     tp_var =  (np.var(in_y)+np.var(out_y))
@@ -80,24 +82,33 @@ def ga_gene_var(args,models,inputdata_test,optimizer):
   #plt.xlim(0,0.7)
   #plt.ylim(0,0.7)
   print('-------------succes------------')
+  plt.xlabel('Generation',fontsize=15)
+  plt.ylabel('Functional differentiation',fontsize=15)
   plt.savefig('src/img/'+args.write_name+'mutial_info_K.svg')
   plt.savefig('src/img/'+args.write_name+'mutial_info_K.png')
   plt.savefig('src/img/'+args.write_name+'mutial_info_K.pdf')
 
 def all_pop_var(args,models,inputdata_test,optimizer):
   #描画要の変数
+  #全て用
   ga_all_var = []
-  pop = 20
-  generation = int(len(models)/pop)
+  #1世代用
+  ga_one_var = []
+  pop = 10
+  generation = int(len(models)/pop-5)
+  generation = int(generation/2)
+  gene = [i+1 for i in range(generation*pop)]
+  pops = [x+1 for x in range(pop)]
   for i in range(generation):
     #世代毎の相互情報量の初期化
     if i == 0:
       num = 0
     else:
-      num += 20 
+      num += pop
     for j in range(pop):
     #世代内の個体を一体づつ持ってくる
       model_num = num+j
+      print(model_num)
       #print(model_num)
       model = models[model_num]
       binde1, binde2, binde3, binde4 = No_binde()
@@ -111,22 +122,25 @@ def all_pop_var(args,models,inputdata_test,optimizer):
       eva= best_eva(sp_var,tp_var)
       all_var = eva
       ga_all_var.append(all_var)
-      print(f'sp_var{sp_var}----tp_var{tp_var}----all_var{all_var}')
-  gene = [i+1 for i in range(generation*pop)]
-  fig = plt.figure()
-  plt.plot(gene,ga_all_var,alpha= 0.5)
-  #plt.scatter(gene,ga_all_var)
-  #移動平均の個数
-  num=5
-  b=np.ones(num)/num
-  #移動平均
-  move_var=np.convolve(ga_all_var, b, mode='same')
-  plt.plot(gene,move_var)
-  plt.grid()
-  plt.xlim(0,200)
-  #plt.ylim(0,0.7)
-  x_memori = [i for i in range(0,200,20)]
-  plt.xticks(x_memori)
+      ga_one_var.append(all_var)
+      #print(f'sp_var{sp_var}----tp_var{tp_var}----all_var{all_var}')
+    print(str(i*2+1)+"世代")
+    #世代における個体の番号における分散の通常の描画
+    #plt.plot(pops,ga_one_var,alpha= 0.5,label=str(i*2+1)+"gene")
+    #移動平均の個数
+    ave=5
+    b=np.ones(ave)/ave
+    #移動平均の描画
+    move_var=np.convolve(ga_one_var, b, mode='same')
+    plt.plot(pops,move_var,label="mv"+str(i*2+1)+"gene")
+    plt.grid()
+    plt.legend(loc='upper right')
+    #描画が終われば世代の数値がリセット
+    ga_one_var = []
+  #世代全体で保存する場合
+  #plt.plot(gene,ga_all_var,alpha= 0.5)
+  #move_var=np.convolve(ga_all_var, b, mode='same')
+  #plt.plot(gene,move_var)
   print('-------------succes------------')
   print(ga_all_var)
   print('-------------sort------------')

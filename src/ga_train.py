@@ -48,10 +48,10 @@ def make_one_gene(args, g, bindes, ind_learn, optimizer, inputdata_test, ind):
     loss = 0
     if g == 0:
       #第一世代では接続構造を生成
-      binde = torch.randint(0, 2, (args.gene_length*2, args.gene_length*2)).to(args.device) 
+      binde = torch.randint(0, 2, (args.gene_length*2, args.gene_length*2)).to(args.device)
     else:
       #新しい接続構造のみ学習
-      binde = torch.from_numpy(bindes[i]).clone().to(args.device) 
+      binde = torch.from_numpy(bindes[i]).clone().to(args.device)
     #モデルの実行，重み,誤差，精度を返して来る．
     print(f'--個体{i+1}--')
     model = esn_model.Binde_ESN_Execution_Model(args).to(args.device)

@@ -52,7 +52,7 @@ def import_data(args):
     bindes = pickle.load(f)
     
     model = Model.esn_model.Binde_ESN_Execution_Model(args)
-    with open('src/data/'+args.model_path+'model.pkl', 'rb') as f:
+    with open('src/data/'+args.model_path+'_model.pkl', 'rb') as f:
         model = cloudpickle.load(f)
     np.set_printoptions(threshold=np.inf)
   return bindes, model
@@ -333,7 +333,7 @@ if __name__ == '__main__':
   bindes, model = import_data(args)
   binde = bindes[-20]
   binde = torch.from_numpy(binde).clone()
-  binde = binde.to(args.device)  
+  binde = binde.to(args.device)
   weight0_data,weight1_data,weight12_data,weight2_data,weight21_data,weight_fc_data = weight_division(model[-20])
   binde1,binde2,binde3,binde4 = binde_division(binde)
   setup = Use_Model.Use_Model(args)
