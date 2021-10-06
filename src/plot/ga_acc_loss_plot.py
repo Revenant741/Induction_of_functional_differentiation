@@ -3,17 +3,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 #python3 src/plot/ga_acc_loss_plot.py 
-#read_name='ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20'
 read_name='ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20'
 #read_name='func_diff_e20_p20_l10'
 #write_name = 'func_diff_eva'
-write_name = 'loss_eva_g50'
+write_name = 'loss_eva_g60'
 accuracy = []
 accuracy2 = []
 gene = []
 generation = []
 survivor = 10 #生き残る個体
-generation = 25
+generation = 60
 
 with open('src/data/'+read_name+'_sp_acc.csv') as f:
     for row in csv.reader(f):

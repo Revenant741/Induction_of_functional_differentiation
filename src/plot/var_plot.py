@@ -28,7 +28,7 @@ def add_arguments(parser):
   #python3 src/plot/var_plot.py --write_name '20epoch/var_gene/var_change'
   #個体毎の分散の分析
   #python3 src/plot/var_plot.py --write_name '20epoch/var_pop/var_change'
-  #python3 src/plot/var_plot.py --write_name 'loss_eva_ga_var_change' --read_name ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20 --model_path ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20
+  #python3 src/plot/var_plot.py --write_name 'loss_eva_ga_var_change' --read_name ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20 --model_path ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20 --device 'cuda:1'
   #python3 src/plot/var_plot.py --write_name 'func_diff_eva_ga_var_change' --read_name func_diff_e20_p20_l10 --model_path func_diff_e20_p20_l10
 def No_binde(size_middle=16):
   binde1 = torch.randint(1, 2, (size_middle, size_middle)).to(args.device)  
@@ -79,26 +79,67 @@ def ga_gene_var(args,models,inputdata_test,optimizer):
   gene = [i+1 for i in range(generation)]
   fig = plt.figure()
   plt.plot(gene,ga_all_var)
-  #plt.xlim(0,0.7)
-  #plt.ylim(0,0.7)
+  plt.xlim(0,60)
+  plt.ylim(0,0.03)
   print('-------------succes------------')
   plt.xlabel('Generation',fontsize=15)
   plt.ylabel('Functional differentiation',fontsize=15)
-  plt.savefig('src/img/'+args.write_name+'mutial_info_K.svg')
-  plt.savefig('src/img/'+args.write_name+'mutial_info_K.png')
-  plt.savefig('src/img/'+args.write_name+'mutial_info_K.pdf')
+  plt.savefig('src/img/'+args.write_name+'_func_diff_gene.svg')
+  plt.savefig('src/img/'+args.write_name+'_func_diff_gene.png')
+  plt.savefig('src/img/'+args.write_name+'_func_diff_gene.pdf')
+
+def one_gene_var(args,models,inputdata_test,optimizer):
+  fig = plt.figure()
+  #描画要の変数
+  #1世代用
+  ga_one_var = []
+  pop = 10
+  generation = int(len(models)/pop)
+  print(generation)
+  pops = [x+1 for x in range(pop)]
+  for i in range(0,generation,10):
+    #世代毎の相互情報量の初期化
+    if i == 0:
+      num = 0
+    else:
+      num += pop
+    for j in range(pop):
+    #世代内の個体を一体づつ持ってくる
+      model_num = num+j
+      print(model_num)
+      #print(model_num)
+      model = models[model_num]
+      binde1, binde2, binde3, binde4 = No_binde()
+      #相互情報量の分析
+      training= train.Adam_train(args,model,optimizer,inputdata_test)
+      h_in_x, h_in_y, h_out_x, h_out_y = training.mutual_info(model,binde1,binde2,binde3,binde4) 
+      #個体毎に分散を算出
+      sp_var =  (np.var(h_in_x)+np.var(h_out_x))
+      tp_var =  (np.var(h_in_y)+np.var(h_out_y))
+      #eva= nomal_eva(sp_var,tp_var)
+      eva= best_eva(sp_var,tp_var)
+      all_var = eva
+      ga_one_var.append(all_var)
+      #print(f'sp_var{sp_var}----tp_var{tp_var}----all_var{all_var}')
+    plt.plot(pops,ga_one_var,label=str(i)+"gene")
+    plt.legend(loc='upper right')
+    #描画が終われば世代の数値がリセット
+    ga_one_var = []
+  plt.grid()
+  plt.ylim(0,0.03)
+  print('-------------succes------------')
+  print('-------------sort------------')
+  #plt.savefig('src/img/'+args.write_name+'_func_diff_onegene.svg')
+  plt.savefig('src/img/'+args.write_name+'_func_diff_onegene.png')
+  #plt.savefig('src/img/'+args.write_name+'_func_diff_onegene.pdf')
 
 def all_pop_var(args,models,inputdata_test,optimizer):
   #描画要の変数
   #全て用
   ga_all_var = []
-  #1世代用
-  ga_one_var = []
   pop = 10
-  generation = int(len(models)/pop-5)
-  generation = int(generation/2)
+  generation = int(len(models)/pop)
   gene = [i+1 for i in range(generation*pop)]
-  pops = [x+1 for x in range(pop)]
   for i in range(generation):
     #世代毎の相互情報量の初期化
     if i == 0:
@@ -122,32 +163,27 @@ def all_pop_var(args,models,inputdata_test,optimizer):
       eva= best_eva(sp_var,tp_var)
       all_var = eva
       ga_all_var.append(all_var)
-      ga_one_var.append(all_var)
-      #print(f'sp_var{sp_var}----tp_var{tp_var}----all_var{all_var}')
-    print(str(i*2+1)+"世代")
-    #世代における個体の番号における分散の通常の描画
-    #plt.plot(pops,ga_one_var,alpha= 0.5,label=str(i*2+1)+"gene")
+      print(f'sp_var{sp_var}----tp_var{tp_var}----all_var{all_var}')
     #移動平均の個数
-    ave=5
+    ave=10
     b=np.ones(ave)/ave
     #移動平均の描画
-    move_var=np.convolve(ga_one_var, b, mode='same')
-    plt.plot(pops,move_var,label="mv"+str(i*2+1)+"gene")
     plt.grid()
     plt.legend(loc='upper right')
-    #描画が終われば世代の数値がリセット
-    ga_one_var = []
   #世代全体で保存する場合
-  #plt.plot(gene,ga_all_var,alpha= 0.5)
-  #move_var=np.convolve(ga_all_var, b, mode='same')
-  #plt.plot(gene,move_var)
+  fig = plt.figure()
+  plt.xlim(0,600)
+  plt.ylim(0,0.03)
+  plt.plot(gene,ga_all_var,alpha= 0.5)
+  move_var=np.convolve(ga_all_var, b, mode='same')
+  plt.plot(gene,move_var)
   print('-------------succes------------')
   print(ga_all_var)
   print('-------------sort------------')
   print(np.argsort(ga_all_var))
-  plt.savefig('src/img/'+args.write_name+'mutial_info_K.svg')
-  plt.savefig('src/img/'+args.write_name+'mutial_info_K.png')
-  plt.savefig('src/img/'+args.write_name+'mutial_info_K.pdf')
+  plt.savefig('src/img/'+args.write_name+'_func_diff_pop.svg')
+  plt.savefig('src/img/'+args.write_name+'_func_diff_pop.png')
+  plt.savefig('src/img/'+args.write_name+'_func_diff_pop.pdf')
 
 def nomal_eva(sp_var,tp_var):
   eva = sp_var+tp_var
@@ -168,8 +204,9 @@ if __name__ == '__main__':
   print("finded_model")
   optimizer = torch.optim.Adam
   inputdata_test = inputdata.make_test(args)
-  ga_gene_var(args,models,inputdata_test,optimizer)
-  #all_pop_var(args,models,inputdata_test,optimizer)
+  #ga_gene_var(args,models,inputdata_test,optimizer)
+  all_pop_var(args,models,inputdata_test,optimizer)
+  #one_gene_var(args,models,inputdata_test,optimizer)
 
 
 

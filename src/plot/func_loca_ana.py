@@ -25,7 +25,8 @@ def add_arguments(parser):
   #世代における最高精度個体の機能局在の分析
   #python3 src/plot/func_loca_ana.py --write_name '20epoch/ana_all/hf_20_func_loc'
   #相互情報の分散の最高値個体の機能局在の分析
-  #python3 src/plot/func_loca_ana.py --write_name '20epoch/ana_all_best_var/hf_20_func_loc'
+  #python3 src/plot/func_loca_ana.py --write_name 'loss_eva_dire_and_mutual/loss_eva_dire_and_mutual' --read_name ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20 --model_path ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20 --device 'cuda:1'
+  #python3 src/plot/func_loca_ana.py --write_name 'func_diff_eva_dire_and_mutual/loss_eva_dire_and_mutual' --read_name ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20 --model_path ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20 --device 'cuda:1'
 
 def No_binde(size_middle=16):
   binde1 = torch.randint(1, 2, (size_middle, size_middle)).to(args.device)  
@@ -55,7 +56,7 @@ def ga_best_acc_ana(args,optimizer,inputdata_test):
     ga_mt.plot_mutial_data(args,i,h_in_x,h_in_y,h_out_x,h_out_y)
 
 def best_func_loca_ana(args,optimizer,inputdata_test):
-  num_list = [146,88,51,34,4,5,7,49,117,139,159,118,160,42,31,68,69,94,14,3,23]
+  num_list = [-9,-19,-29,-40]
   for num in num_list: 
     model_num = num
     model = models[model_num]

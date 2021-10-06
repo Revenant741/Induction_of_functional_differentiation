@@ -12,6 +12,10 @@ import cloudpickle
 import argparse
 import networkx as nx
 from networkx.drawing.nx_agraph import to_agraph 
+#上位ディレクトリのインポートの為のシステム
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import model as Model
 import pygraphviz as pgv
 import seaborn as sns
@@ -32,6 +36,8 @@ def add_arguments(parser):
   parser.add_argument('--neuron_start', type=int, default=0, help='use_optimizer')
   parser.add_argument('--neuron_num', type=int,default=16, help='use_optimizer')
   #src/weight_conect.py --neuron_start 0 --neuron_num 16
+  #python3 src/plot/weight_conect_heat_map.py  --read_name ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20 --model_path ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20 --device 'cuda:1'
+  #python3 src/plot/weight_conect_heat_map.py --write_name '/conectome/conectome' --read_name func_diff_e20_p20_l10 --model_path func_diff_e20_p20_l10 --device 'cuda:0'
 
 def import_data(args):
   bindes = []
@@ -39,7 +45,7 @@ def import_data(args):
     bindes = pickle.load(f)
     
     model = Model.esn_model.Binde_ESN_Execution_Model(args)
-    with open('src/data/'+args.model_path+'model.pkl', 'rb') as f:
+    with open('src/data/'+args.model_path+'_model.pkl', 'rb') as f:
         model = cloudpickle.load(f)
     np.set_printoptions(threshold=np.inf)
   return bindes, model
@@ -57,18 +63,31 @@ def weight_division(model):
   weight2_data = np.array(weight2)
   weight3_data = np.array(weight3)
   weight4_data = np.array(weight4)
-  return weight1_data,weight2_data,weight3_data,weight4_data
+  Input_Neurons = np.hstack([weight1_data,weight2_data])
+  Output_Neurons = np.hstack([weight3_data,weight4_data])
+  ALL_Neurons = np.vstack([Input_Neurons,Output_Neurons])
+  return weight1_data,weight2_data,weight3_data,weight4_data,ALL_Neurons
 
+def plus_binde(binde,ALL_Neurons):
+  ALL_Neurons *= binde
+  return ALL_Neurons
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
   add_arguments(parser)
   args = parser.parse_args()
   print(args)
+  #拘束条件とモデルをインポート
   bindes, model = import_data(args)
-  weight1_data,weight2_data,weight3_data,weight4_data = weight_division(model)
+  binde = bindes[-10]
+  model = model[-10]
+  #重みの値の調整
+  weight1_data,weight2_data,weight3_data,weight4_data,ALL_Neurons = weight_division(model)
+  #重みの値に拘束条件を付与
+  ALL_Neurons=plus_binde(binde,ALL_Neurons)
   print('-------------succes------------')
-  print(weight1_data.shape)
+  #print(weight1_data.shape)
+  print(ALL_Neurons)
   fig = plt.figure()
   sns.heatmap(weight1_data, cmap=cm.jet)
   plt.xlabel("InputNeurons")
@@ -89,6 +108,11 @@ if __name__ == '__main__':
   plt.xlabel("OutputNeurons")
   plt.ylabel("InputNeurons")
   plt.savefig('src/img/'+args.write_name+'_weight4_heat.png')
+  fig = plt.figure()
+  sns.heatmap(ALL_Neurons, cmap=cm.jet,vmax=1.5, vmin=-1.5)
+  plt.xlabel("Neuron_Number")
+  plt.ylabel("Conect_Number")
+  plt.savefig('src/img/'+args.write_name+'_weight_binde_ALL_heat.png')
 
 
 

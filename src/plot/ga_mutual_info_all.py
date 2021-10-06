@@ -109,7 +109,7 @@ def plot_mutial_data(args,gene,in_x,in_y,out_x,out_y):
   #色なしの場合
   #plt.scatter(in_x[-60:],in_y[-60:], c='blue',label="Neurons")
   plt.scatter(in_x[-60:],in_y[-60:], c='blue')
-  plt.scatter(out_x[-60:],out_y[-60:], c='blue')
+  plt.scatter(out_x[-60:],out_y[-60:], c='red')
   #plt.xlabel('I_{sp}',fontsize=15)
   #plt.ylabel('I_{tp}',fontsize=15)
   #plt.legend(loc='upper right')
