@@ -148,9 +148,6 @@ def cut_layer_neurons(h_in_x,h_out_x,h_in_y,h_out_y,how,mode_num,what,mode):
   #print(cut_posison)
   #print(h_in_x)
   for i in range(len(cut_posison)):
-    #特定のニューロンをカット
-    print(f'cut!======={cut_posison[i]}=============')
-    binde[cut_posison[i]][:] = 0
     #結果における精度の評価
     testdata, sp_test, tp_test = inputdata_test
     loss_func = nn.BCEWithLogitsLoss()
@@ -158,24 +155,29 @@ def cut_layer_neurons(h_in_x,h_out_x,h_in_y,h_out_y,how,mode_num,what,mode):
     print_acc(i,sp_acc,tp_acc,sp_loss,tp_loss)
     sp_acc_list.append(sp_acc)
     tp_acc_list.append(tp_acc)
-    cut_num.append(i+1)
+    cut_num.append(i)
     #ロボトミー割合の計算
     if how == 'layer_cut':
-      rate.append((i+1)/15)
+      rate.append((i)/16)
     elif how == 'neuron_cut':
-      rate.append((i+1)/32)
+      rate.append((i)/32)
+    #特定のニューロンをカット
+    print(f'cut!======={cut_posison[i]}=============')
+    binde[cut_posison[i]][:] = 0
   #精度の推移のプロット
   plt.figure()
-  #plt.plot(cut_num,sp_acc_list,label="spatial information",color="g")
-  #plt.plot(cut_num,tp_acc_list,label="temporal information",color="r")
-  plt.plot(rate,sp_acc_list,label="spatial information",color="g")
-  plt.plot(rate,tp_acc_list,label="temporal information",color="r")
+  plt.plot(cut_num,sp_acc_list,label="spatial information",color="g")
+  plt.plot(cut_num,tp_acc_list,label="temporal information",color="r")
+  #plt.plot(rate,sp_acc_list,label="spatial information",color="g")
+  #plt.plot(rate,tp_acc_list,label="temporal information",color="r")
   #plt.yticks((10,20,30,40,50,60,70,80,90,100))
   plt.yticks((0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1))
-  plt.xticks((0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1))
+  #plt.xticks((0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1))
   plt.ylim(0,1)
-  plt.xlim(0,1)
-  plt.xlabel('Rate',fontsize=15)
+  #plt.xlim(0,1)
+  plt.xlim(0,32)
+  #plt.xlabel('Rate',fontsize=15)
+  plt.xlabel('Cut_neuron_number',fontsize=15)
   plt.ylabel('Accuracy(%)',fontsize=15)
   plt.legend(loc=3)
   if mode == 'lobotomy':
@@ -217,13 +219,13 @@ if __name__ == '__main__':
   inputdata_test = inputdata.make_test(args)
   training= train.Adam_train(args,model,optimizer,inputdata_test)
   h_in_x, h_in_y, h_out_x, h_out_y = training.mutual_info(model,binde1,binde2,binde3,binde4)
-  how ='layer_cut'
-  #how ='neuron_cut'
-  mode_num = 3
-  #what = 'loss'
-  what = 'func_diff'
-  #mode = 'lobotomy'
-  mode = 'lobotomy_reverse'
+  #how ='layer_cut'
+  how ='neuron_cut'
+  mode_num = 2
+  what = 'loss'
+  #what = 'func_diff'
+  mode = 'lobotomy'
+  #mode = 'lobotomy_reverse'
   #相互情報量から拘束条件の再作成
   cut_layer_neurons(h_in_x,h_out_x,h_in_y,h_out_y,how,mode_num,what,mode)
 

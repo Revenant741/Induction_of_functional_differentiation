@@ -3,70 +3,70 @@
   <key id="d0" for="node" attr.name="color" attr.type="string" />
   <graph edgedefault="directed">
     <node id="-16">
-      <data key="d0">green</data>
+      <data key="d0">blue</data>
     </node>
     <node id="-15">
-      <data key="d0">green</data>
+      <data key="d0">blue</data>
     </node>
     <node id="-14">
-      <data key="d0">green</data>
+      <data key="d0">blue</data>
     </node>
     <node id="-13">
-      <data key="d0">green</data>
+      <data key="d0">blue</data>
     </node>
     <node id="-12">
-      <data key="d0">green</data>
+      <data key="d0">blue</data>
     </node>
     <node id="-11">
-      <data key="d0">green</data>
+      <data key="d0">blue</data>
     </node>
     <node id="-10">
-      <data key="d0">green</data>
+      <data key="d0">blue</data>
     </node>
     <node id="-9">
-      <data key="d0">green</data>
+      <data key="d0">blue</data>
     </node>
     <node id="-8">
-      <data key="d0">green</data>
+      <data key="d0">blue</data>
     </node>
     <node id="-7">
-      <data key="d0">green</data>
+      <data key="d0">blue</data>
     </node>
     <node id="-6">
-      <data key="d0">green</data>
+      <data key="d0">blue</data>
     </node>
     <node id="-5">
-      <data key="d0">green</data>
+      <data key="d0">blue</data>
     </node>
     <node id="-4">
-      <data key="d0">green</data>
+      <data key="d0">blue</data>
     </node>
     <node id="-3">
-      <data key="d0">green</data>
+      <data key="d0">blue</data>
     </node>
     <node id="-2">
-      <data key="d0">green</data>
+      <data key="d0">blue</data>
     </node>
     <node id="-1">
-      <data key="d0">green</data>
+      <data key="d0">blue</data>
     </node>
     <node id="0">
       <data key="d0">red</data>
     </node>
     <node id="1">
-      <data key="d0">red</data>
+      <data key="d0">green</data>
     </node>
     <node id="2">
-      <data key="d0">red</data>
+      <data key="d0">green</data>
     </node>
     <node id="3">
       <data key="d0">red</data>
     </node>
     <node id="4">
-      <data key="d0">blue</data>
+      <data key="d0">green</data>
     </node>
     <node id="5">
-      <data key="d0">blue</data>
+      <data key="d0">red</data>
     </node>
     <node id="6">
       <data key="d0">red</data>
@@ -78,22 +78,22 @@
       <data key="d0">red</data>
     </node>
     <node id="9">
-      <data key="d0">red</data>
+      <data key="d0">green</data>
     </node>
     <node id="10">
-      <data key="d0">blue</data>
+      <data key="d0">green</data>
     </node>
     <node id="11">
-      <data key="d0">blue</data>
+      <data key="d0">red</data>
     </node>
     <node id="12">
-      <data key="d0">blue</data>
+      <data key="d0">red</data>
     </node>
     <node id="13">
       <data key="d0">red</data>
     </node>
     <node id="14">
-      <data key="d0">blue</data>
+      <data key="d0">red</data>
     </node>
     <node id="15">
       <data key="d0">red</data>
@@ -102,7 +102,7 @@
       <data key="d0">red</data>
     </node>
     <node id="17">
-      <data key="d0">blue</data>
+      <data key="d0">red</data>
     </node>
     <node id="18">
       <data key="d0">red</data>
@@ -120,25 +120,25 @@
       <data key="d0">red</data>
     </node>
     <node id="23">
-      <data key="d0">blue</data>
+      <data key="d0">red</data>
     </node>
     <node id="24">
       <data key="d0">red</data>
     </node>
     <node id="25">
-      <data key="d0">red</data>
+      <data key="d0">green</data>
     </node>
     <node id="26">
       <data key="d0">red</data>
     </node>
     <node id="27">
-      <data key="d0">blue</data>
+      <data key="d0">red</data>
     </node>
     <node id="28">
       <data key="d0">red</data>
     </node>
     <node id="29">
-      <data key="d0">blue</data>
+      <data key="d0">green</data>
     </node>
     <node id="30">
       <data key="d0">red</data>
@@ -164,101 +164,101 @@
     <node id="37">
       <data key="d0">cyan</data>
     </node>
-    <edge source="-16" target="11" id="1" />
-    <edge source="-15" target="9" id="1" />
-    <edge source="-14" target="13" id="1" />
-    <edge source="-13" target="13" id="1" />
-    <edge source="-12" target="6" id="1" />
-    <edge source="-11" target="9" id="1" />
-    <edge source="-10" target="11" id="1" />
-    <edge source="-9" target="7" id="1" />
-    <edge source="-8" target="10" id="1" />
-    <edge source="-7" target="12" id="1" />
-    <edge source="-6" target="8" id="1" />
-    <edge source="-5" target="1" id="1" />
-    <edge source="-4" target="9" id="1" />
-    <edge source="-3" target="3" id="1" />
-    <edge source="-2" target="11" id="1" />
-    <edge source="-1" target="11" id="1" />
+    <edge source="-16" target="13" id="1" />
+    <edge source="-15" target="15" id="1" />
+    <edge source="-14" target="12" id="1" />
+    <edge source="-13" target="12" id="1" />
+    <edge source="-12" target="5" id="1" />
+    <edge source="-11" target="5" id="1" />
+    <edge source="-10" target="5" id="1" />
+    <edge source="-9" target="3" id="1" />
+    <edge source="-8" target="5" id="1" />
+    <edge source="-7" target="5" id="1" />
+    <edge source="-6" target="5" id="1" />
+    <edge source="-5" target="3" id="1" />
+    <edge source="-4" target="12" id="1" />
+    <edge source="-3" target="12" id="1" />
+    <edge source="-2" target="13" id="1" />
+    <edge source="-1" target="15" id="1" />
     <edge source="0" target="15" id="1" />
-    <edge source="0" target="29" id="1" />
-    <edge source="1" target="11" id="1" />
-    <edge source="1" target="30" id="1" />
-    <edge source="2" target="3" id="1" />
-    <edge source="2" target="27" id="1" />
-    <edge source="3" target="9" id="1" />
-    <edge source="3" target="26" id="1" />
-    <edge source="4" target="11" id="1" />
+    <edge source="0" target="21" id="1" />
+    <edge source="1" target="10" id="1" />
+    <edge source="1" target="28" id="1" />
+    <edge source="2" target="14" id="1" />
+    <edge source="2" target="21" id="1" />
+    <edge source="3" target="4" id="1" />
+    <edge source="3" target="22" id="1" />
+    <edge source="4" target="7" id="1" />
     <edge source="4" target="19" id="1" />
-    <edge source="5" target="14" id="1" />
-    <edge source="5" target="23" id="1" />
-    <edge source="6" target="11" id="1" />
-    <edge source="6" target="21" id="1" />
-    <edge source="7" target="10" id="1" />
-    <edge source="7" target="18" id="1" />
-    <edge source="8" target="5" id="1" />
-    <edge source="8" target="24" id="1" />
-    <edge source="9" target="11" id="1" />
-    <edge source="9" target="16" id="1" />
-    <edge source="10" target="12" id="1" />
-    <edge source="10" target="20" id="1" />
-    <edge source="11" target="1" id="1" />
-    <edge source="11" target="27" id="1" />
-    <edge source="12" target="5" id="1" />
-    <edge source="12" target="30" id="1" />
+    <edge source="5" target="3" id="1" />
+    <edge source="5" target="27" id="1" />
+    <edge source="6" target="10" id="1" />
+    <edge source="6" target="30" id="1" />
+    <edge source="7" target="11" id="1" />
+    <edge source="7" target="22" id="1" />
+    <edge source="8" target="13" id="1" />
+    <edge source="8" target="31" id="1" />
+    <edge source="9" target="15" id="1" />
+    <edge source="9" target="24" id="1" />
+    <edge source="10" target="15" id="1" />
+    <edge source="10" target="28" id="1" />
+    <edge source="11" target="11" id="1" />
+    <edge source="11" target="25" id="1" />
+    <edge source="12" target="3" id="1" />
+    <edge source="12" target="28" id="1" />
     <edge source="13" target="11" id="1" />
-    <edge source="13" target="30" id="1" />
-    <edge source="14" target="11" id="1" />
-    <edge source="14" target="30" id="1" />
-    <edge source="15" target="11" id="1" />
-    <edge source="15" target="23" id="1" />
-    <edge source="16" target="28" id="1" />
+    <edge source="13" target="29" id="1" />
+    <edge source="14" target="5" id="1" />
+    <edge source="14" target="27" id="1" />
+    <edge source="15" target="3" id="1" />
+    <edge source="15" target="16" id="1" />
+    <edge source="16" target="27" id="1" />
     <edge source="16" target="9" id="1" />
-    <edge source="16" target="33" id="1" />
-    <edge source="17" target="21" id="1" />
-    <edge source="17" target="8" id="1" />
-    <edge source="17" target="35" id="1" />
-    <edge source="18" target="18" id="1" />
+    <edge source="16" target="35" id="1" />
+    <edge source="17" target="16" id="1" />
+    <edge source="17" target="7" id="1" />
+    <edge source="17" target="34" id="1" />
+    <edge source="18" target="25" id="1" />
     <edge source="18" target="14" id="1" />
-    <edge source="18" target="37" id="1" />
-    <edge source="19" target="17" id="1" />
-    <edge source="19" target="13" id="1" />
-    <edge source="19" target="32" id="1" />
-    <edge source="20" target="26" id="1" />
-    <edge source="20" target="10" id="1" />
-    <edge source="20" target="34" id="1" />
-    <edge source="21" target="25" id="1" />
-    <edge source="21" target="10" id="1" />
-    <edge source="21" target="35" id="1" />
-    <edge source="22" target="27" id="1" />
-    <edge source="22" target="10" id="1" />
-    <edge source="22" target="34" id="1" />
+    <edge source="18" target="32" id="1" />
+    <edge source="19" target="28" id="1" />
+    <edge source="19" target="4" id="1" />
+    <edge source="19" target="33" id="1" />
+    <edge source="20" target="20" id="1" />
+    <edge source="20" target="14" id="1" />
+    <edge source="20" target="33" id="1" />
+    <edge source="21" target="23" id="1" />
+    <edge source="21" target="11" id="1" />
+    <edge source="21" target="32" id="1" />
+    <edge source="22" target="29" id="1" />
+    <edge source="22" target="2" id="1" />
+    <edge source="22" target="35" id="1" />
     <edge source="23" target="29" id="1" />
-    <edge source="23" target="11" id="1" />
-    <edge source="23" target="35" id="1" />
-    <edge source="24" target="17" id="1" />
-    <edge source="24" target="1" id="1" />
-    <edge source="24" target="33" id="1" />
-    <edge source="25" target="18" id="1" />
-    <edge source="25" target="12" id="1" />
+    <edge source="23" target="12" id="1" />
+    <edge source="23" target="34" id="1" />
+    <edge source="24" target="24" id="1" />
+    <edge source="24" target="11" id="1" />
+    <edge source="24" target="32" id="1" />
+    <edge source="25" target="23" id="1" />
+    <edge source="25" target="10" id="1" />
     <edge source="25" target="35" id="1" />
-    <edge source="26" target="26" id="1" />
-    <edge source="26" target="3" id="1" />
-    <edge source="26" target="33" id="1" />
-    <edge source="27" target="27" id="1" />
-    <edge source="27" target="4" id="1" />
-    <edge source="27" target="36" id="1" />
+    <edge source="26" target="30" id="1" />
+    <edge source="26" target="15" id="1" />
+    <edge source="26" target="32" id="1" />
+    <edge source="27" target="24" id="1" />
+    <edge source="27" target="1" id="1" />
+    <edge source="27" target="35" id="1" />
     <edge source="28" target="25" id="1" />
-    <edge source="28" target="11" id="1" />
-    <edge source="28" target="32" id="1" />
-    <edge source="29" target="25" id="1" />
-    <edge source="29" target="2" id="1" />
-    <edge source="29" target="35" id="1" />
-    <edge source="30" target="25" id="1" />
-    <edge source="30" target="14" id="1" />
+    <edge source="28" target="0" id="1" />
+    <edge source="28" target="35" id="1" />
+    <edge source="29" target="20" id="1" />
+    <edge source="29" target="5" id="1" />
+    <edge source="29" target="33" id="1" />
+    <edge source="30" target="30" id="1" />
+    <edge source="30" target="13" id="1" />
     <edge source="30" target="34" id="1" />
-    <edge source="31" target="31" id="1" />
-    <edge source="31" target="10" id="1" />
-    <edge source="31" target="32" id="1" />
+    <edge source="31" target="29" id="1" />
+    <edge source="31" target="12" id="1" />
+    <edge source="31" target="33" id="1" />
   </graph>
 </graphml>

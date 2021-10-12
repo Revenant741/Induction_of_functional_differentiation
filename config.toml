@@ -1,3 +1,3 @@
 [docker]
 base_image = "pytorch/pytorch:1.8.0-cuda11.1-cudnn8-devel"
-image = "func_diff_rnn:1.0"
+image = "func_diff_ana:1.0"

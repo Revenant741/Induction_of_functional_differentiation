@@ -57,9 +57,9 @@ def direct_plot(args,model,binde1,binde2,binde3,binde4,h_in_x,h_in_y,h_out_x,h_o
   fc_node = []
   in_node = []
   color_patt = {"color" : "magenta"}
-  color_patt1 = {"color" : "green"}
+  color_patt1 = {"color" : "blue"}
   color_patt2 = {"color" : "red"}
-  color_patt3 = {"color" : "blue"}
+  color_patt3 = {"color" : "green"}
   color_patt4 = {"color" : "orange"}
   color_patt5 = {"color" : "cyan"}
 

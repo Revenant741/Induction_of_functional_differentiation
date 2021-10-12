@@ -28,7 +28,7 @@ def add_arguments(parser):
   #python3 src/plot/var_plot.py --write_name '20epoch/var_gene/var_change'
   #個体毎の分散の分析
   #python3 src/plot/var_plot.py --write_name '20epoch/var_pop/var_change'
-  #python3 src/plot/var_plot.py --write_name 'loss_eva_ga_var_change' --read_name ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20 --model_path ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20 --device 'cuda:1'
+  #python3 src/plot/var_plot.py --write_name 'loss_eva_ga_var_change_g100' --read_name ga_hf_loss_e20_p20_l10_c1_g100/ga_hf_pop_20 --model_path ga_hf_loss_e20_p20_l10_c1_g100/ga_hf_pop_20 --device 'cuda:1'
   #python3 src/plot/var_plot.py --write_name 'func_diff_eva_ga_var_change' --read_name func_diff_e20_p20_l10 --model_path func_diff_e20_p20_l10
 def No_binde(size_middle=16):
   binde1 = torch.randint(1, 2, (size_middle, size_middle)).to(args.device)  
@@ -79,7 +79,7 @@ def ga_gene_var(args,models,inputdata_test,optimizer):
   gene = [i+1 for i in range(generation)]
   fig = plt.figure()
   plt.plot(gene,ga_all_var)
-  plt.xlim(0,60)
+  plt.xlim(0,100)
   plt.ylim(0,0.03)
   print('-------------succes------------')
   plt.xlabel('Generation',fontsize=15)
@@ -121,7 +121,7 @@ def one_gene_var(args,models,inputdata_test,optimizer):
       all_var = eva
       ga_one_var.append(all_var)
       #print(f'sp_var{sp_var}----tp_var{tp_var}----all_var{all_var}')
-    plt.plot(pops,ga_one_var,label=str(i)+"gene")
+    plt.plot(pops,ga_one_var,label=str(i+10)+"gene")
     plt.legend(loc='upper right')
     #描画が終われば世代の数値がリセット
     ga_one_var = []
@@ -129,9 +129,9 @@ def one_gene_var(args,models,inputdata_test,optimizer):
   plt.ylim(0,0.03)
   print('-------------succes------------')
   print('-------------sort------------')
-  #plt.savefig('src/img/'+args.write_name+'_func_diff_onegene.svg')
+  plt.savefig('src/img/'+args.write_name+'_func_diff_onegene.svg')
   plt.savefig('src/img/'+args.write_name+'_func_diff_onegene.png')
-  #plt.savefig('src/img/'+args.write_name+'_func_diff_onegene.pdf')
+  plt.savefig('src/img/'+args.write_name+'_func_diff_onegene.pdf')
 
 def all_pop_var(args,models,inputdata_test,optimizer):
   #描画要の変数
@@ -172,7 +172,7 @@ def all_pop_var(args,models,inputdata_test,optimizer):
     plt.legend(loc='upper right')
   #世代全体で保存する場合
   fig = plt.figure()
-  plt.xlim(0,600)
+  plt.xlim(0,1000)
   plt.ylim(0,0.03)
   plt.plot(gene,ga_all_var,alpha= 0.5)
   move_var=np.convolve(ga_all_var, b, mode='same')
@@ -204,8 +204,8 @@ if __name__ == '__main__':
   print("finded_model")
   optimizer = torch.optim.Adam
   inputdata_test = inputdata.make_test(args)
-  #ga_gene_var(args,models,inputdata_test,optimizer)
-  all_pop_var(args,models,inputdata_test,optimizer)
+  ga_gene_var(args,models,inputdata_test,optimizer)
+  #all_pop_var(args,models,inputdata_test,optimizer)
   #one_gene_var(args,models,inputdata_test,optimizer)
 
 

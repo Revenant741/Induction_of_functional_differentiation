@@ -38,6 +38,7 @@ def add_arguments(parser):
   #src/weight_conect.py --neuron_start 0 --neuron_num 16
   #python3 src/plot/weight_conect_heat_map.py  --read_name ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20 --model_path ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20 --device 'cuda:1'
   #python3 src/plot/weight_conect_heat_map.py --write_name '/conectome/conectome' --read_name func_diff_e20_p20_l10 --model_path func_diff_e20_p20_l10 --device 'cuda:0'
+  #python3 src/plot/weight_conect_heat_map.py --write_name '/conectome/conectome_loss_eva_g100' --read_name ga_hf_loss_e20_p20_l10_c1_g100/ga_hf_pop_20 --model_path ga_hf_loss_e20_p20_l10_c1_g100/ga_hf_pop_20 --device 'cuda:1'
 
 def import_data(args):
   bindes = []
@@ -79,8 +80,8 @@ if __name__ == '__main__':
   print(args)
   #拘束条件とモデルをインポート
   bindes, model = import_data(args)
-  binde = bindes[-10]
-  model = model[-10]
+  binde = bindes[999]
+  model = model[999]
   #重みの値の調整
   weight1_data,weight2_data,weight3_data,weight4_data,ALL_Neurons = weight_division(model)
   #重みの値に拘束条件を付与

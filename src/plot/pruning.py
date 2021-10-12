@@ -36,6 +36,7 @@ def add_arguments(parser):
   parser.add_argument('--neuron_start', type=int, default=0, help='use_optimizer')
   parser.add_argument('--neuron_num', type=int,default=16, help='use_optimizer')
   #python3 src/plot/pruning.py  --read_name ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20 --model_path ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20 --device 'cuda:1'
+  #python3 src/plot/pruning.py  --read_name ga_hf_loss_e20_p20_l10_c1_g100/ga_hf_pop_20 --model_path ga_hf_loss_e20_p20_l10_c1_g100/ga_hf_pop_20 --device 'cuda:1'
   #python3 src/plot/pruning.py --read_name func_diff_e20_p20_l10 --model_path func_diff_e20_p20_l10 --device 'cuda:0'
 
 #モデルの読み込み
@@ -158,11 +159,11 @@ if __name__ == '__main__':
   print(args)
   #モデルと拘束条件をインポート
   bindes, models = import_data(args)
-  binde = bindes[-10]
+  binde = bindes[999]
   binde = torch.from_numpy(binde).clone()
   binde = binde.to(args.device)
   binde1,binde2,binde3,binde4 = binde_division(binde)
-  model = models[-10]
+  model = models[999]
   #モデルの用意
   optimizer = torch.optim.Adam
   inputdata_test = inputdata.make_test(args)
@@ -170,7 +171,7 @@ if __name__ == '__main__':
   #重みのデータの用意
   weight1_data,weight2_data,weight3_data,weight4_data,ALL_Neurons = weight_division(model)
   #重みデータとモデルを用いてプルーニング
-  #what = 'loss'
-  what = 'func_diff'
+  what = 'loss'
+  #what = 'func_diff'
   pruning_main(ALL_Neurons,what)
 
