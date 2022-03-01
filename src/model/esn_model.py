@@ -84,9 +84,9 @@ class Binde_ESN_Execution_Model(nn.Module):
     return output, x1, x2
 
   def initHidden(self):
-    self.binde_esn.x_1 = torch.zeros(self.batch_size, self.size_middle).to(self.device) 
-    self.binde_esn.x_2 = torch.zeros(self.batch_size, self.size_middle).to(self.device) 
-    self.binde_esn.x_out = torch.zeros(self.batch_size, self.size_middle).to(self.device) 
+    self.binde_esn.x_1 = torch.zeros(self.batch_size, self.size_middle, requires_grad=True).to(self.device) 
+    self.binde_esn.x_2 = torch.zeros(self.batch_size, self.size_middle, requires_grad=True).to(self.device) 
+    self.binde_esn.x_out = torch.zeros(self.batch_size, self.size_middle, requires_grad=True).to(self.device) 
     #self.binde_esn.x_1 = torch.zeros(self.batch_size, self.size_middle).to("cuda:0") 
     #self.binde_esn.x_2 = torch.zeros(self.batch_size, self.size_middle).to("cuda:0") 
     #self.binde_esn.x_out = torch.zeros(self.batch_size, self.size_middle).to("cuda:0") 

@@ -204,8 +204,8 @@ if __name__ == '__main__':
   print("finded_model")
   optimizer = torch.optim.Adam
   inputdata_test = inputdata.make_test(args)
-  ga_gene_var(args,models,inputdata_test,optimizer)
-  #all_pop_var(args,models,inputdata_test,optimizer)
+  #ga_gene_var(args,models,inputdata_test,optimizer)
+  all_pop_var(args,models,inputdata_test,optimizer)
   #one_gene_var(args,models,inputdata_test,optimizer)
 
 

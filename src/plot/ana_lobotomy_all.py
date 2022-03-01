@@ -45,8 +45,6 @@ def add_arguments(parser):
   parser.add_argument('--optimizer', default='HessianFree', help='use_optimizer')
   parser.add_argument('--neuron_start', type=int, default=0, help='use_optimizer')
   parser.add_argument('--neuron_num', type=int,default=16, help='use_optimizer')
-  #python3 src/plot/lobotomy.py  --read_name ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20 --model_path ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20 --device 'cuda:1'
-  #python3 src/plot/lobotomy.py --read_name func_diff_e20_p20_l10 --model_path func_diff_e20_p20_l10 --device 'cuda:0'
   #python3 src/plot/ana_lobotomy_all.py  --write_name 'lobotomy_ana/lobotomy' --read_name ga_hf_loss_e20_p20_l10_c1_g100/ga_hf_pop_20 --model_path ga_hf_loss_e20_p20_l10_c1_g100/ga_hf_pop_20 --device 'cuda:1'
 
 #モデル読み込み
@@ -69,14 +67,21 @@ def binde_division(binde):
   binde4=binde[16:32,16:32]
   return binde1,binde2,binde3,binde4
 
-def cut_layer_neurons(h_in_x,h_out_x,h_in_y,h_out_y,mode_num,what,mode):
+def cut_layer_neurons(h_in_x,h_out_x,h_in_y,h_out_y,mode_num,what,mode,how,binde):
   sp_acc_list = []
   tp_acc_list = []
   cut_num = []
   rate = []
-  cut_posison, patt = lobotomy.neuron_liq_neurons(h_in_x,h_out_x,h_in_y,h_out_y,mode_num,mode)
+  #レイヤー毎の時間空間情報 1~4
+  if how == 'layer_cut':
+    cut_posison, patt = lobotomy.neuron_liq_layer(h_in_x,h_out_x,h_in_y,h_out_y,mode_num,mode)
+  #ニューロン全体での時間空間情報 1~2
+  elif how == 'neuron_cut':
+    cut_posison, patt = lobotomy.neuron_liq_neurons(h_in_x,h_out_x,h_in_y,h_out_y,mode_num,mode)
   #print(cut_posison)
   #print(h_in_x)
+  #ニューロンカット前の精度を算出
+  binde1,binde2,binde3,binde4 = binde_division(binde)
   for i in range(len(cut_posison)):
     #結果における精度の評価
     testdata, sp_test, tp_test = inputdata_test
@@ -91,38 +96,44 @@ def cut_layer_neurons(h_in_x,h_out_x,h_in_y,h_out_y,mode_num,what,mode):
     weight1_data,weight2_data,weight3_data,weight4_data,ALL_Neurons = conectome.weight_division(model)
     #重みの値に拘束条件を付与
     ALL_Neurons= conectome.plus_binde(binde.tolist(),ALL_Neurons)
+    plt.figure()
     sns.heatmap(ALL_Neurons, cmap=cm.jet,vmax=1.5, vmin=-1.5)
     plt.xlabel("Neuron_Number")
     plt.ylabel("Conect_Number")
     plt.savefig('src/img/'+args.write_name+'_weight_binde_ALL_heat_NO'+str(i)+'.png')
     #特定のニューロンをカット
     print(f'cut!======={cut_posison[i]}=============')
-    binde[:][cut_posison[i]] = 0
+    cut = torch.zeros(1,32).to(args.device)
+    binde[cut_posison[i]][:] = cut
+    #binde[:][cut_posison[i]] = cut
+    #ニューロンカット後の拘束条件
+    binde1,binde2,binde3,binde4 = binde_division(binde)
     #描画用のリスト
     sp_acc_list.append(sp_acc)
     tp_acc_list.append(tp_acc)
     print(sp_acc_list)
     cut_num.append(i)
-    #ロボトミー割合の計算
-    rate.append((i)/32)
-    #精度の推移のプロット
-    plt.figure()
-    plt.plot(cut_num,sp_acc_list,label="spatial information",color="g")
-    plt.plot(cut_num,tp_acc_list,label="temporal information",color="r")
-    #plt.plot(rate,sp_acc_list,label="spatial information",color="g")
-    #plt.plot(rate,tp_acc_list,label="temporal information",color="r")
-    #plt.yticks((10,20,30,40,50,60,70,80,90,100))
-    plt.yticks((0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1))
-    #plt.xticks((0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1))
-    #plt.xticks((0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1))
-    plt.ylim(0,1)
-    #plt.xlim(0,1)
-    plt.xlim(0,32)
-    plt.xlabel('Rate',fontsize=15)
-    plt.ylabel('Accuracy(%)',fontsize=15)
-    plt.legend(loc=3)
-    plt.title(what+'_eva_lobotomy_'+patt)
-    plt.savefig('src/img/lobotomy_ana/'+what+'_eva_lobotomy_'+patt+'NO'+str(i)+'.png')
+  #ロボトミー割合の計算
+  rate.append((i)/32)
+  #精度の推移のプロット
+  plt.figure()
+  plt.plot(cut_num,sp_acc_list,label="spatial information",color="g")
+  plt.plot(cut_num,tp_acc_list,label="temporal information",color="r")
+  #plt.plot(rate,sp_acc_list,label="spatial information",color="g")
+  #plt.plot(rate,tp_acc_list,label="temporal information",color="r")
+  #plt.yticks((10,20,30,40,50,60,70,80,90,100))
+  plt.yticks((0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1))
+  #plt.xticks((0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1))
+  #plt.xticks((0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1))
+  plt.ylim(0,1)
+  #plt.xlim(0,1)
+  plt.xlim(0,32)
+  plt.xlabel('Rate',fontsize=15)
+  plt.ylabel('Accuracy(%)',fontsize=15)
+  plt.legend(loc=3)
+  plt.title(what+'_eva_lobotomy_'+patt)
+  print(patt)
+  plt.savefig('src/img/lobotomy_ana/'+what+'_eva_lobotomy_'+patt+'NO'+str(i)+'.png')
 
 if __name__ == '__main__':
   #アーグパース
@@ -145,10 +156,12 @@ if __name__ == '__main__':
   inputdata_test = inputdata.make_test(args)
   training= train.Adam_train(args,model,optimizer,inputdata_test)
   h_in_x, h_in_y, h_out_x, h_out_y = training.mutual_info(model,binde1,binde2,binde3,binde4)
-  mode_num = 2
+  mode_num = 3
   #what = 'loss'
   mode = 'lobotomy'
   what = 'func_diff'
+  #how = 'neuron_cut'
+  how = 'layer_cut'
   #相互情報量から拘束条件の再作成
-  cut_layer_neurons(h_in_x,h_out_x,h_in_y,h_out_y,mode_num,what,mode)
+  cut_layer_neurons(h_in_x,h_out_x,h_in_y,h_out_y,mode_num,what,mode,how,binde)
 

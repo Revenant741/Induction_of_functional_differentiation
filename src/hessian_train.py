@@ -16,8 +16,8 @@ def add_arguments(parser):
   parser.add_argument('--model_point', type=int, default=-10, help='Use_after_serch_parameter_point')
   parser.add_argument('--optimizer', default='HessianFree', help='use_optimizer')
 #python3 src/hessian_train.py --name 'ga_hf_5_best_train' --binde_path 'src/data/ga_hf_5_binde.dat' --model_path 'src/data/ga_hf_5_model.pkl'
-#python3 src/hessian_train.py --name 'loss_eva_bestloss' --binde_path 'src/data/ga_hf_loss_e20_p20_l10/ga_hf_pop_20_binde.dat' --model_path 'src/data/ga_hf_loss_e20_p20_l10/ga_hf_pop_20_model.pkl'
 #python3 src/hessian_train.py --name 'RNN_ana_c0' --device "cuda:0"
+#python3 src/hessian_train.py --name 'loss_eva_bestloss' --binde_path 'src/data/ga_hf_loss_e20_p20_l10/ga_hf_pop_20_binde.dat' --model_path 'src/data/ga_hf_loss_e20_p20_l10/ga_hf_pop_20_model.pkl'
 class HessianFree_train(train.Adam_train):
   def __init__(self,args,model,optimizer,inputdata_test):
     super().__init__(args,model,optimizer,inputdata_test)

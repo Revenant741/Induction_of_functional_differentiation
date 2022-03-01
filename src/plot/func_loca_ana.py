@@ -27,7 +27,7 @@ def add_arguments(parser):
   #相互情報の分散の最高値個体の機能局在の分析
   #python3 src/plot/func_loca_ana.py --write_name 'loss_eva_dire_and_mutual/loss_eva_dire_and_mutual' --read_name ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20 --model_path ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20 --device 'cuda:1'
   #python3 src/plot/func_loca_ana.py --write_name 'loss_eva_dire_and_mutual/loss_eva_dire_and_mutual_g100' --read_name ga_hf_loss_e20_p20_l10_c1_g100/ga_hf_pop_20 --model_path ga_hf_loss_e20_p20_l10_c1_g100/ga_hf_pop_20 --device 'cuda:1'
-  #python3 src/plot/func_loca_ana.py --write_name 'func_diff_eva_dire_and_mutual/loss_eva_dire_and_mutual' --read_name ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20 --model_path ga_hf_loss_e20_p20_l10_c1_g50/ga_hf_pop_20 --device 'cuda:1'
+  #python3 src/plot/func_loca_ana.py --write_name 'func_diff_eva_dire_and_mutual/loss_eva_dire_and_mutual' --read_name func_diff_e20_p20_l10 --model_path func_diff_e20_p20_l10 --device 'cuda:0'
 
 def No_binde(size_middle=16):
   binde1 = torch.randint(1, 2, (size_middle, size_middle)).to(args.device)  

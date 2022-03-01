@@ -6,11 +6,11 @@ import numpy as np
 read_name='ga_hf_loss_e20_p20_l10_c1_g100/ga_hf_pop_20'
 #read_name='func_diff_e20_p20_l10'
 #write_name = 'func_diff_eva'
-write_name = 'loss_eva_g100'
+write_name = 'loss_eva_g100_mvave'
 accuracy = []
 accuracy2 = []
 gene = []
-generation = []
+gene1 = []
 survivor = 10 #生き残る個体
 generation = 100
 
@@ -30,6 +30,10 @@ with open('src/data/'+read_name+'_tp_acc.csv') as f:
 for i in range(generation):
   gene.append(i)
 
+for j in range(generation):
+  for k in range(survivor):
+      gene1.append(j)
+
 acc1 = np.array(accuracy).reshape(-1,survivor)
 ave1 = np.mean(acc1, axis=1)
 y_err1 = np.std(acc1, axis=1)
@@ -41,15 +45,18 @@ y_err2 = np.std(acc2, axis=1)
 
 plt.figure()
 fig, ax = plt.subplots()
-ax.errorbar(gene,ave1[:len(gene)], yerr=y_err1[:len(gene)],linestyle="None",capsize=5,label="spatial standard deviation",color="lightgreen")
-ax.errorbar(gene,ave2[:len(gene)], yerr=y_err2[:len(gene)],linestyle="None",capsize=5,label="temporal standard deviation",color="lightcoral")
+#ax.errorbar(gene,ave1[:len(gene)], yerr=y_err1[:len(gene)],linestyle="None",capsize=5,label="spatial standard deviation",color="lightgreen")
+#ax.errorbar(gene,ave2[:len(gene)], yerr=y_err2[:len(gene)],linestyle="None",capsize=5,label="temporal standard deviation",color="lightcoral")
 plt.plot(gene,ave1[:len(gene)],label="moving average spatial information",color="g")
 plt.plot(gene,ave2[:len(gene)],label="moving average temporal information",color="r")
+plt.plot(gene1,accuracy,alpha=0.3,label="spatial information",color="g")
+plt.plot(gene1,accuracy2,alpha=0.3,label="temporal information",color="r")
 plt.xlim(0,len(gene)-1)
 #plt.yticks((0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0))
 plt.yticks((10,20,30,40,50,60,70,80,90,100))
 #plt.xticks((0,1,2,3,4))
 plt.ylim(0,105)
+plt.xlim(0,100)
 plt.xlabel('Generation',fontsize=15)
 plt.ylabel('Accuracy(%)',fontsize=15)
 plt.legend(loc=4)

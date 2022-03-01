@@ -102,24 +102,25 @@ def gene_best_pop_plot(args,pop,n):
 
 def plot_mutial_data(args,gene,in_x,in_y,out_x,out_y):
   fig = plt.figure()
-  #plt.scatter(in_x[-60:],in_y[-60:], c='blue',label="input neurons")
-  #plt.scatter(out_x[-60:],out_y[-60:], c='red',label="output neurons")
+  plt.scatter(in_x[-60:],in_y[-60:], c='blue',label="input neurons")
+  plt.scatter(out_x[-60:],out_y[-60:], c='red',label="output neurons")
   #plt.scatter(in_x[-60:],in_y[-60:], c='blue')
   #plt.scatter(out_x[-60:],out_y[-60:], c='red')
   #色なしの場合
   #plt.scatter(in_x[-60:],in_y[-60:], c='blue',label="Neurons")
-  plt.scatter(in_x[-60:],in_y[-60:], c='blue')
-  plt.scatter(out_x[-60:],out_y[-60:], c="orange")
-  #plt.xlabel('I_{sp}',fontsize=15)
-  #plt.ylabel('I_{tp}',fontsize=15)
-  #plt.legend(loc='upper right')
-  #plt.legend(fontsize=18)
+  #plt.scatter(in_x[-60:],in_y[-60:], c='blue')
+  #plt.scatter(out_x[-60:],out_y[-60:], c="orange")
+  
+  plt.xlabel('I_{sp}',fontsize=15)
+  plt.ylabel('I_{tp}',fontsize=15)
+  plt.legend(loc='upper right')
+  plt.legend(fontsize=18)
   plt.xlim(0,0.7)
   plt.ylim(0,0.7)
   #plt.savefig('src/img/'+write_name+'mutial_info.png')
   print('-------------succes------------')
   plt.savefig('src/img/'+args.write_name+'NO'+str(gene)+'mutial_info.png')
-  plt.savefig('src/img/'+args.write_name+'NO'+str(gene)+'MI.svg')
+  #plt.savefig('src/img/'+args.write_name+'NO'+str(gene)+'MI.svg')
 
 if __name__ == '__main__':
   generation = 4

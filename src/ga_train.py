@@ -28,12 +28,14 @@ def add_arguments(parser):
   parser.add_argument('--pop', type=int, default=20, help='pop_model_number')
   parser.add_argument('--survivor', type=int, default=10, help='pop_model_number')
   parser.add_argument('--mutate_rate', default=0.25, help='mutate_rate')
-  parser.add_argument('--generation', type=int, default=100, help='generation')
+  parser.add_argument('--generation', type=int, default=200, help='generation')
   parser.add_argument('--gene_length', default=16, help='pop_model_number')
   #test時
   #python3 src/ga_train.py --optimizer Adam --pop 10 --survivor 4 --name 'ga_test'
   #実行
   #python3 src/ga_train.py  --epoch 20 --device 'cuda:0' --name 'func_diff_e20_p20_l10'
+  #python3 src/ga_train.py --optimizer Adam --epoch 200 --device 'cuda:0' --name 'Adam_loss_e20_p20_l10'
+  #python3 src/ga_train.py  --epoch 20 --device 'cuda:0' --name 'loss_eva_e20_p20_l10_g200'
 
 
 #世代における個体の評価
@@ -68,6 +70,7 @@ def make_one_gene(args, g, bindes, ind_learn, optimizer, inputdata_test, ind):
     #個体毎に分散を算出
     sp_var =  (np.var(h_in_x)+np.var(h_out_x))
     tp_var =  (np.var(h_in_y)+np.var(h_out_y))
+    #機能分化の度合い
     eva= best_eva(sp_var,tp_var)
     binde = binde.to('cpu').detach().numpy().copy()
     ind.append((acc,loss,eva,binde,sp_accuracys[-1],tp_accuracys[-1],sp_loss_list[-1],tp_loss_list[-1],model,h_in_x, h_in_y, h_out_x, h_out_y))
@@ -87,9 +90,9 @@ def best_eva(sp_var,tp_var):
 def evalution(ind):
   #0で精度、1で誤差，Falseで小さい順，Trueで大きい順
   #誤差
-  #ind = sorted(ind, key=lambda x:x[1], reverse=False)
+  ind = sorted(ind, key=lambda x:x[1], reverse=False)
   #機能分化
-  ind = sorted(ind, key=lambda x:x[2], reverse=True)
+  #ind = sorted(ind, key=lambda x:x[2], reverse=True)
   return ind
 
 #二点交叉

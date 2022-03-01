@@ -20,7 +20,7 @@ def add_arguments(parser):
   parser.add_argument('--batch', type=int,default=10, help='batch_size')
   parser.add_argument('--binde_path', type=str, default='src/data/ga_hf_5_binde.dat', help='import_file_name_of_binde')
   parser.add_argument('--model_path', type=str, default='src/data/ga_hf_5_model.pkl', help='import_file_name_model')
-  parser.add_argument('--After_search', type=bool, default=True, help='Use_after_search_parameter?')
+  parser.add_argument('--After_search', type=bool, default=False, help='Use_after_search_parameter?')
   parser.add_argument('--model_point', type=int, default=-20, help='Use_after_serch_parameter_point')
   parser.add_argument('--optimizer', default='Adam', help='use_optimizer')
 #python3 src/train.py
@@ -75,16 +75,15 @@ class Adam_train:
 
   def train(self, model,traindata,loss_func,optimizer,train_ans,binde1,binde2,binde3,binde4):
     optimizer.zero_grad()
-    losses = 0
     #学習データをスライス
     for i in range(traindata.shape[2]):
       step_input = traindata[:10,:16,i]
       out, x_1, x_2 = model(step_input,binde1,binde2,binde3,binde4)
       ans = train_ans[:10,i,:6].type_as(out)
       loss = loss_func(out,ans)
-      losses += loss
-    losses.backward(retain_graph=True)
+      loss.backward(retain_graph=True)
     optimizer.step()
+    model.initHidden()
 
   def test(self, model,testdata,loss_func,optimizer,sp_test,tp_test,binde1,binde2,binde3,binde4):
     sp_right_ans = 0
